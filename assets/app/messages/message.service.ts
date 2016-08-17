@@ -1,5 +1,5 @@
 import {Http, Headers} from "angular2/http";
-import {Injectable} from "angular2/core";
+import {Injectable, EventEmitter} from "angular2/core";
 import 'rxjs/Rx';
 import { Observable } from "rxjs/Observable";
 import {Message} from "./message";
@@ -9,6 +9,7 @@ import {Message} from "./message";
 
 export class MessageService {
   messages: Message[] = [];
+  messageIsEdit = new EventEmitter<Message>();
   host: string = 'http://localhost:3000/message';
 
   constructor (private _http: Http) {}
@@ -43,8 +44,17 @@ export class MessageService {
               .catch(error => Observable.throw(error.json()));
   }
 
+  updateMessage(message: message) {
+    const body = JSON.stringify(message);
+    const headers = new Headers({'Content-Type': 'application/json'});
+    return this._http.patch(this.host + '/' + message.messageId, body, {headers: headers})
+            .map(reponse => reponse.json())
+            .catch(error => Observable.throw(error.json()));
+  }
+
   editMessage(message: Message) {
-    this.messages[this.messages.indexOf(message)] = new Message('Edit Message', null, 'Arm');
+    
+    this.messageIsEdit.emit(message);
   }
 
   deleteMessage(message: Message) {
