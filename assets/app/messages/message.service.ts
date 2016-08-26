@@ -10,7 +10,7 @@ import {Message} from "./message";
 export class MessageService {
   messages: Message[] = [];
   messageIsEdit = new EventEmitter<Message>();
-  host: string = 'http://localhost:3000/message';
+  host: string = 'http://localhost:3000/message/';
 
   constructor (private _http: Http) {}
 
@@ -44,10 +44,10 @@ export class MessageService {
               .catch(error => Observable.throw(error.json()));
   }
 
-  updateMessage(message: message) {
+  updateMessage(message: Message) {
     const body = JSON.stringify(message);
     const headers = new Headers({'Content-Type': 'application/json'});
-    return this._http.patch(this.host + '/' + message.messageId, body, {headers: headers})
+    return this._http.patch(this.host + message.messageId, body, {headers: headers})
             .map(reponse => reponse.json())
             .catch(error => Observable.throw(error.json()));
   }
@@ -59,5 +59,8 @@ export class MessageService {
 
   deleteMessage(message: Message) {
     this.messages.splice(this.messages.indexOf(message), 1);
+    return this._http.delete(this.host + message.messageId)
+            .map(reponse => reponse.json())
+            .catch(error => Observable.throw(error.json()));
   }
 }
