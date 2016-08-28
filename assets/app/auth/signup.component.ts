@@ -53,9 +53,9 @@ export class SignupComponent {
                         this.myForm.value.firstName, this.myForm.value.lastName);
         this._authService.signup(user)
             .subscribe(
-                // data => console.log(data),
-                // error => console.log(error)
-            )；
+                data => console.log(data),
+                error => console.log(error)
+            );
     }   
 
     private isEmail(control: Control): {[s: string]: boolean} {

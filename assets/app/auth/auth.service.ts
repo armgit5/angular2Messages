@@ -7,7 +7,7 @@ import {User} from "./user";
 @Injectable()
 
 export class AuthService {
-    host: string = 'http://localhost:3000/message/';
+    host: string = 'http://localhost:3000/user/';
 
     constructor(private _http: Http) {}
 
@@ -17,5 +17,13 @@ export class AuthService {
         return this._http.post(this.host, body, {headers: headers})
                 .map(response => response.json())
                 .catch(error => Observable.throw(error.json()));
-        }
+    }
+
+    signin(user: User) {
+        const body = JSON.stringify(user);
+        const headers = new Headers({'Content-Type': 'application/json'});
+        return this._http.post(this.host+'signin', body, {headers: headers})
+                .map(response => response.json())
+                .catch(error => Observable.throw(error.json()));
+    }
 }
