@@ -21,7 +21,7 @@ export class MessageService {
       return this._http.post(this.host + token, body, {headers: headers})
               .map(response => {
                 const data = response.json().obj;
-                let message = new Message(data.content, data._id, data.user.firstName, data.user);
+                let message = new Message(data.content, data._id, data.user.firstName, data.user._id);
                 return message;
               })
               .catch(error => Observable.throw(error.json()));
@@ -35,7 +35,7 @@ export class MessageService {
                 let objs: any[] = [];
             
                 for (let i=0; i<data.length; i++) {
-                  let message = new Message(data[i].content, data[i]._id, data[i].user.firstName, data[i].user);
+                  let message = new Message(data[i].content, data[i]._id, data[i].user.firstName, data[i].user._id);
                   console.log(message);
                   objs.push(message);
                 }
