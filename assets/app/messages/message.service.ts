@@ -10,14 +10,15 @@ import {Message} from "./message";
 export class MessageService {
   messages: Message[] = [];
   messageIsEdit = new EventEmitter<Message>();
-  host: string = 'http://localhost:3000/message/';
+  host: string = 'http://localhost:3000/message';
 
   constructor (private _http: Http) {}
 
   addMessage(message: Message) {
       const body = JSON.stringify(message);
       const headers = new Headers({'Content-Type': 'application/json'});
-      return this._http.post(this.host, body, {headers: headers})
+      const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+      return this._http.post(this.host + token, body, {headers: headers})
               .map(response => {
                 const data = response.json().obj;
                 let message = new Message(data.content, data._id, 'Dummy', null);
@@ -47,7 +48,7 @@ export class MessageService {
   updateMessage(message: Message) {
     const body = JSON.stringify(message);
     const headers = new Headers({'Content-Type': 'application/json'});
-    return this._http.patch(this.host + message.messageId, body, {headers: headers})
+    return this._http.patch(this.host + '/' + message.messageId, body, {headers: headers})
             .map(reponse => reponse.json())
             .catch(error => Observable.throw(error.json()));
   }
