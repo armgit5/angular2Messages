@@ -21,7 +21,7 @@ export class MessageService {
       return this._http.post(this.host + token, body, {headers: headers})
               .map(response => {
                 const data = response.json().obj;
-                let message = new Message(data.content, data._id, 'Dummy', null);
+                let message = new Message(data.content, data._id, data.user.firstName, data.user);
                 return message;
               })
               .catch(error => Observable.throw(error.json()));
@@ -35,7 +35,7 @@ export class MessageService {
                 let objs: any[] = [];
             
                 for (let i=0; i<data.length; i++) {
-                  let message = new Message(data[i].content, data[i]._id, 'Dummy', null);
+                  let message = new Message(data[i].content, data[i]._id, data[i].user.firstName, data[i].user);
                   console.log(message);
                   objs.push(message);
                 }
@@ -48,7 +48,8 @@ export class MessageService {
   updateMessage(message: Message) {
     const body = JSON.stringify(message);
     const headers = new Headers({'Content-Type': 'application/json'});
-    return this._http.patch(this.host + '/' + message.messageId, body, {headers: headers})
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
+    return this._http.patch(this.host + '/' + message.messageId + token, body, {headers: headers})
             .map(reponse => reponse.json())
             .catch(error => Observable.throw(error.json()));
   }
@@ -59,8 +60,9 @@ export class MessageService {
   }
 
   deleteMessage(message: Message) {
+    const token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
     this.messages.splice(this.messages.indexOf(message), 1);
-    return this._http.delete(this.host + message.messageId)
+    return this._http.delete(this.host + '/' + message.messageId + token)
             .map(reponse => reponse.json())
             .catch(error => Observable.throw(error.json()));
   }

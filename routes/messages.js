@@ -7,6 +7,7 @@ var User = require('../models/user');
 
 router.get('/', function(req, res, next) {
     Message.find()
+        .populate('user', 'firstName')
         .exec(function(err, docs) {
             if (err) {
                 return res.status(404).json({
