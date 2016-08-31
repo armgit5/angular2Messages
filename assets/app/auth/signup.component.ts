@@ -2,6 +2,7 @@ import {Component, OnInit} from "angular2/core";
 import {FormBuilder, ControlGroup, Validators, Control} from "angular2/common";
 import {AuthService} from "./auth.service";
 import {User} from "./user";
+import {ErrorService} from "../errors/error.service";
 
 @Component({
     selector: 'my-signup',
@@ -35,7 +36,7 @@ export class SignupComponent {
     myForm: ControlGroup;
     
 
-    constructor(private _fb: FormBuilder, private _authService: AuthService) {
+    constructor(private _fb: FormBuilder, private _authService: AuthService, private _errorSerivce: ErrorService) {
          this.myForm = this._fb.group({
             firstName: ['', Validators.required],
             lastName: ['', Validators.required],
@@ -54,7 +55,7 @@ export class SignupComponent {
         this._authService.signup(user)
             .subscribe(
                 data => console.log(data),
-                error => console.log(error)
+                error => this._errorSerivce.handleError(error)
             );
     }   
 

@@ -3,6 +3,7 @@ import {FormBuilder, ControlGroup, Validators, Control} from "angular2/common";
 import {AuthService} from "./auth.service";
 import {User} from "./user";
 import {Router} from "angular2/router";
+import {ErrorService} from "../errors/error.service";
 
 @Component({
     selector: 'my-signin',
@@ -28,7 +29,7 @@ export class SigninComponent {
     myForm: ControlGroup;
 
     constructor(private _fb: FormBuilder, private _authService: AuthService, 
-                private _router: Router) {
+                private _router: Router, private _errorSerivce: ErrorService) {
          this.myForm = this._fb.group({
             email: ['', Validators.compose([
                 Validators.required,
@@ -47,7 +48,7 @@ export class SigninComponent {
                     localStorage.setItem('userId', data.userId);
                     this._router.navigateByUrl('/');
                 },
-                error => console.error(error)
+                error => this._errorSerivce.handleError(error)
             );
         
     }   
