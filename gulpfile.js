@@ -2,6 +2,7 @@ var gulp = require('gulp');
 
 var appDev = 'assets/app/';
 var appProd = 'public/js/app/';
+var vendor = 'public/js/vendor';
 
 /* JS & TS */
 var jsuglify = require('gulp-uglify');
