@@ -7,7 +7,8 @@ import {User} from "./user";
 @Injectable()
 
 export class AuthService {
-    host: string = 'http://localhost:3000/user/';
+    // host: string = 'http://localhost:3000/user/';
+    host: string = 'https://armangular2.herokuapp.com/user/';
 
     constructor(private _http: Http) {}
 
