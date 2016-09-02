@@ -11,6 +11,7 @@ export class MessageService {
   messages: Message[] = [];
   messageIsEdit = new EventEmitter<Message>();
   // host: string = 'http://localhost:3000/message';
+  
   host: string = 'https://armangular2.herokuapp.com/message';
 
   constructor (private _http: Http) {}
